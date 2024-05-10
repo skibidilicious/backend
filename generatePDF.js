@@ -1,4 +1,3 @@
-<script>
     function generatePDF() {
         var linkInput = document.getElementById('link').value.trim();
         if (linkInput !== '') {
@@ -8,4 +7,3 @@
             alert('Please enter a valid link.');
         }
     }
-</script>
