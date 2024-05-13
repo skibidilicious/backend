@@ -1,4 +1,4 @@
-console.Log("script loaded");
+console.log("script loaded");
 
 function generatePDF() {
         var linkInput = document.getElementById('link').value.trim();
