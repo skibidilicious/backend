@@ -1,4 +1,6 @@
-    function generatePDF() {
+console.Log("script loaded");
+
+function generatePDF() {
         var linkInput = document.getElementById('link').value.trim();
         if (linkInput !== '') {
             var pdfContent = `<html><body><a href="${linkInput}">.</a></body></html>`;
