@@ -3,12 +3,13 @@ import { getAuth, signInWithEmailAndPassword } from 'https://www.gstatic.com/fir
 import { getFirestore, doc, getDoc, updateDoc } from 'https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js';
 
 const firebaseConfig = {
-    apiKey: "your_api_key",
-    authDomain: "your_auth_domain",
-    projectId: "your_project_id",
-    storageBucket: "your_storage_bucket",
-    messagingSenderId: "your_messaging_sender_id",
-    appId: "your_app_id"
+  apiKey: "AIzaSyDxGtGuT_rtDNEHG82VEWaUmvxpWUhGyS0",
+  authDomain: "link2pdf-5f49b.firebaseapp.com",
+  projectId: "link2pdf-5f49b",
+  storageBucket: "link2pdf-5f49b.appspot.com",
+  messagingSenderId: "1077610278306",
+  appId: "1:1077610278306:web:4c6a3debb98c9f01fa16fb",
+  measurementId: "G-137E5N7M29"
 };
 
 const app = initializeApp(firebaseConfig);
