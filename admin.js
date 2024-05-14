@@ -56,6 +56,7 @@ function login() {
         });
 }
 
+window.login = login;
 // Load settings from Firestore
 function loadSettings() {
     const shutoffRef = doc(db, 'info', 'shutoff');
@@ -74,6 +75,8 @@ function loadSettings() {
         }
     });
 }
+
+window.loadSettings = loadSettings;
 
 // Update settings in Firestore
 function updateSettings() {
@@ -94,6 +97,8 @@ function updateSettings() {
             alert('Error updating settings: ' + error.message);
         });
 }
+
+window.updateSettings = updateSettings;
 
 // Set focus on the email input on page load
 document.getElementById('email').focus();
