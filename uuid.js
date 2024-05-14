@@ -55,6 +55,7 @@ function getCombinedIdentifier() {
     return deviceID + '-' + fingerprint;
 }
 
-// Use the combined identifier
-let combinedIdentifier = getCombinedIdentifier();
-console.log('Combined Identifier:', combinedIdentifier);
+document.addEventListener('DOMContentLoaded', function() {
+    let combinedIdentifier = getCombinedIdentifier();
+    console.log('Combined Identifier:', combinedIdentifier);
+});
