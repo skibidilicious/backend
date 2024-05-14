@@ -14,7 +14,7 @@ function getCookie(name) {
     return matches ? decodeURIComponent(matches[1]) : undefined;
 }
 
-// Function to set a cookie
+// Function to set a cookie with a long expiration date
 function setCookie(name, value, days) {
     let expires = "";
     if (days) {
