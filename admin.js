@@ -3,7 +3,8 @@ import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.11.1/fireba
 import { 
     getAuth, 
     signInWithEmailAndPassword, 
-    onAuthStateChanged 
+    onAuthStateChanged,
+    signOut
 } from 'https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js';
 import { 
     getFirestore, 
@@ -99,6 +100,22 @@ function updateSettings() {
 }
 
 window.updateSettings = updateSettings;
+
+function signOutUser() {
+    const auth = getAuth();
+    signOut(auth)
+        .then(() => {
+            // Sign-out successful
+            console.log('User signed out successfully');
+        })
+        .catch((error) => {
+            // An error happened
+            console.error('Error signing out:', error);
+            alert('Error signing out: ' + error.message);
+        });
+}
+
+window.signOutUser = signOutUser;
 
 // Set focus on the email input on page load
 document.getElementById('email').focus();
