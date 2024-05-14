@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <title>Document Service</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        :root {
+            --background-color: #f9f9f9;
+            --text-color: #333;
+            --input-border: #ccc;
+            --button-bg-color: #007bff;
+            --button-hover-bg-color: #0056b3;
+            --container-bg: #fff;
+            --container-shadow: rgba(0, 0, 0, 0.1);
+            --announcement-bg: #fffae6; /* Light yellow background for announcement */
+            --announcement-text-color: #b58900; /* Dark yellow text color for contrast */
+        }
+
+        [data-theme="dark"] {
+            --background-color: #333;
+            --text-color: #f9f9f9;
+            --input-border: #666;
+            --button-bg-color: #0056b3;
+            --button-hover-bg-color: #007bff;
+            --container-bg: #444;
+            --container-shadow: rgba(255, 255, 255, 0.1);
+            --announcement-bg: #333333; /* Darker background for dark mode */
+            --announcement-text-color: #cccccc; /* Lighter text for readability in dark mode */
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: var(--container-bg);
+            border-radius: 10px;
+            box-shadow: 0 0 10px var(--container-shadow);
+            transition: background-color 0.3s, box-shadow 0.3s;
+        }
+        label {
+            display: block;
+            margin-bottom: 10px;
+        }
+        input[type="text"], button {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        input[type="text"] {
+            border: 1px solid var(--input-border);
+            border-radius: 5px;
+            background-color: transparent;
+            color: var(--text-color);
+        }
+        button {
+            background-color: var(--button-bg-color);
+            color: var(--text-color);
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: var(--button-hover-bg-color);
+        }
+        #dark-mode-toggle {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            padding: 10px 15px;
+            font-size: 14px;
+            background: var(--button-bg-color);
+            color: var(--text-color);
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .announcement {
+            background-color: var(--announcement-bg);
+            color: var(--announcement-text-color);
+            text-align: center;
+            padding: 10px;
+            font-size: 18px;
+            border-bottom: 1px solid var(--input-border);
+        }
+    </style>
+
+</head>
+<body>
+    <i id="theme-toggle" class="fas fa-moon" style="position: fixed; top: 10px; right: 10px; font-size: 24px; cursor: pointer;"></i>
+    <script>
+        var darkModeToggle = document.getElementById('theme-toggle');
+    
+        darkModeToggle.addEventListener('click', function() {
+            var body = document.body;
+            const currentTheme = body.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+            body.setAttribute('data-theme', currentTheme);
+        });
+    </script>
+    
+    <div id="announcement-banner" class="announcement">
+        <p id="announcement-msg"></p>
+    </div>
+
+    <div class="container">
+        <h1>Document Generator</h1>
+        <div id="shutoff-msg" style="color: red; display: none;"></div>
+        <label for="link">Enter URL:</label>
+        <input type="text" id="link" placeholder="https://example.com">
+        <button onclick="generatePDF()">Generate PDF</button>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/gh/skibidilicious/backend/generatePDF.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-analytics.js";
+        import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js";
+    
+        const firebaseConfig = {
+            apiKey: "AIzaSyDxGtGuT_rtDNEHG82VEWaUmvxpWUhGyS0",
+            authDomain: "link2pdf-5f49b.firebaseapp.com",
+            projectId: "link2pdf-5f49b",
+            storageBucket: "link2pdf-5f49b.appspot.com",
+            messagingSenderId: "1077610278306",
+            appId: "1:1077610278306:web:4c6a3debb98c9f01fa16fb",
+            measurementId: "G-137E5N7M29"
+        };
+    
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const db = getFirestore(app);
+    
+        async function checkDocument() {
+            const shutoffRef = doc(db, "info", "shutoff");
+            const shutoffMsgRef = doc(db, "info", "shutoffmsg");
+            const announcementRef = doc(db, "info", "announcement");
+    
+            try {
+                const shutoffSnap = await getDoc(shutoffRef);
+                const shutoffMsgSnap = await getDoc(shutoffMsgRef);
+                const announcementSnap = await getDoc(announcementRef);
+    
+                if (shutoffSnap.exists()) {
+                    const shutoff = shutoffSnap.data().shutoff;
+                    if (shutoff) {
+                        const shutoffMsg = shutoffMsgSnap.exists() ? shutoffMsgSnap.data().msg : "Service temporarily unavailable.";
+                        document.body.innerHTML = `
+                            <h1 style="color: red; text-align: center;">Service temporarily unavailable.</h1>
+                            <p style="text-align: center;">${shutoffMsg}</p>
+                        `;
+                    } else {
+                        // Add the announcement banner at the top of the page
+                        const announcementMsg = announcementSnap.exists() ? announcementSnap.data().msg : "";
+                        if (announcementMsg.trim() !== "") {
+                            const banner = document.getElementById('announcement-banner');
+                            const p = document.getElementById('announcement-msg');
+                            p.textContent = announcementMsg;
+                            banner.appendChild(p);
+                            banner.style.display = 'block'; // Show the banner
+                            document.body.insertBefore(banner, document.body.firstChild);
+                        } else {
+                            const banner = document.getElementById('announcement-banner');
+                            if (banner) {
+                                banner.style.display = 'none'; // Hide the banner
+                            }
+                        }
+                    }
+                } else {
+                    console.error("Shutoff document does not exist!");
+                }
+            } catch (error) {
+                console.error("Error reading documents:", error);
+            }
+        }
+    
+        // Run the checkDocument function every minute
+        setInterval(checkDocument, 60000);
+    
+        // Initial check on page load
+        checkDocument();
+    </script>
+    
+</body>
+</html>

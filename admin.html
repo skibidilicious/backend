@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/skibidilicious/backend@main/admin.css"> <!-- Link to your CSS file for styling -->
+    <script type="module" src="https://cdn.jsdelivr.net/gh/skibidilicious/backend@main/admin.js"></script>
+</head>
+<body>
+    <div id="login-container" class="">
+        <h2>Login</h2>
+        <input type="email" id="email" placeholder="Email">
+        <input type="password" id="password" placeholder="Password">
+        <button onclick="login()">Login</button>
+    </div>
+    <div id="admin-panel" class="hidden">
+        <h2>Admin Dashboard</h2>
+        <div>
+            <label for="shutoff-checkbox">Shutoff:</label>
+            <input type="checkbox" id="shutoff-checkbox">
+        </div>
+        <div>
+            <label for="shutoff-message">Shutoff Message:</label>
+            <input type="text" id="shutoff-message">
+        </div>
+        <div>
+            <label for="announcement-message">Announcement Message:</label>
+            <input type="text" id="announcement-message">
+        </div>
+        <button onclick="updateSettings()">Update Settings</button>
+        <button onclick="signOutUser()">Sign Out</button>
+    </div>
+</body>
+</html>
