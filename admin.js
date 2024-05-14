@@ -1,3 +1,4 @@
+console.log("admin.js loaded");
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.11.1/firebase-app.js';
 import { 
     getAuth, 
